@@ -10,6 +10,8 @@ require (
 	github.com/huandu/xstrings v1.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.11 // indirect
 	github.com/mitchellh/copystructure v1.0.0 // indirect
+	github.com/russross/blackfriday/v2 v2.0.1
+	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/stretchr/testify v1.4.0
 	go.uber.org/multierr v1.4.0 // indirect
