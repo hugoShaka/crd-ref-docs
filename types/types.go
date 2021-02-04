@@ -200,6 +200,7 @@ type Field struct {
 	Embedded bool
 	Doc      string
 	Type     *Type
+	Optional bool
 }
 
 // Key generates the unique name for the give type.

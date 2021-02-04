@@ -36,6 +36,7 @@ import (
 const (
 	groupNameMarker   = "groupName"
 	objectRootMarker  = "kubebuilder:object:root"
+	optionalMarker    = "optional"
 	versionNameMarker = "versionName"
 )
 
@@ -184,10 +185,13 @@ func (p *processor) findAPITypes(directory string) error {
 
 			// load the type
 			key := fmt.Sprintf("%s.%s", pkg.PkgPath, info.Name)
-			typeDef, ok := p.types[key]
-			if !ok {
-				typeDef = p.processType(pkg, info, 0)
-			}
+			// Note: Even if we already scanned the type during the in-depth search we want to scan it again
+			// This allows us to always have the right info from markers
+			// This is needed to get the markers list for example
+			// typeDef, ok := p.types[key]
+			// if !ok {
+			typeDef := p.processType(pkg, info, 0)
+			//}
 
 			p.types[key] = typeDef
 			if typeDef != nil && typeDef.Kind != types.BasicKind {
@@ -316,6 +320,7 @@ func (p *processor) processStructFields(parentType *types.Type, pkg *loader.Pack
 			Name:     f.Name,
 			Doc:      f.Doc,
 			Embedded: f.Name == "",
+			Optional: f.Markers.Get(optionalMarker) != nil,
 		}
 
 		if tagVal, ok := f.Tag.Lookup("json"); ok {
@@ -506,5 +511,6 @@ func mkRegistry() *markers.Registry {
 	registry.Define(groupNameMarker, markers.DescribesPackage, "")
 	registry.Define(objectRootMarker, markers.DescribesType, true)
 	registry.Define(versionNameMarker, markers.DescribesPackage, "")
+	registry.Define(optionalMarker, markers.DescribesField, struct{}{})
 	return registry
 }
