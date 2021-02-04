@@ -1,1 +1,4 @@
 out.asciidoc
+out.html
+vendor/
+.idea/
